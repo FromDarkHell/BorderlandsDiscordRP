@@ -57,7 +57,7 @@ Installation
 	  2. You remember that `Client ID` you should've written down (See Step #4 again) right?
 	  	  1. Now is the time to paste/type the ID in.
 	  	  2. If you don't know how to copy paste into consoles like `Borderlands RP.exe`
-	  	     1. Right click on the top bar that that says, `Borderlands Discord Rich Presence`[!Top Bar](https://puu.sh/CiEdn/5e496344c7.png)
+	  	     1. Right click on the top bar that that says, `Borderlands Discord Rich Presence`![Top Bar](https://puu.sh/CiEdn/5e496344c7.png)
 	  	     2. Next move onto the little text thing that says, `Edit`
 	  	     3. Next click the thing that says `Paste`.
 	  	     4. You may or may not need to click enter for it to finish pasting
