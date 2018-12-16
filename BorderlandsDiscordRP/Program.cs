@@ -25,7 +25,10 @@ namespace BorderlandsDiscordRP
         private static int discordPipe = -1;
 
         // The ID of the client using Discord RP.
-        private static string clientID = "463568908415401984";
+        private static string clientID = Settings.Default.clientID;
+
+        // The double (in milliseconds) for how much we update
+        private static double timeToUpdate = Settings.Default.timeUpdate;
 
         // The level of logging to use
         private static LogLevel logLevel = LogLevel.Warning;
@@ -49,6 +52,7 @@ namespace BorderlandsDiscordRP
         private static string lastKnownMap = "Unknown";
         private static string lastKnownMission = "Unknown";
         private static string lastKnownChar = "Unknown";
+        private static int lastKnownLevel = 1;
         #endregion
 
         #endregion
@@ -63,40 +67,59 @@ namespace BorderlandsDiscordRP
                 if (args[i] == "-pipe")
                     discordPipe = int.Parse(args[++i]);
             }
-
             // If we just ran the program for the first time and our client ID is nothing
-            if (Settings.Default.clientID == "")
+            if (Settings.Default.clientID == "" || clientID == "")
                 updateClientID();
 
             setupClient();
             while (isRunning)
             {
-                Console.WriteLine("Press C to change your client ID if need be.\nPress ESC to close the program and stop rich presence.");
+                Console.WriteLine("Press C to change your client ID if need be.\nPress T to change how much the program will update Discord\nPress ESC to close the program and stop rich presence.");
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
                 if (keyInfo.Key == ConsoleKey.C)
                     updateClientID();
 
-                if (keyInfo.Key == ConsoleKey.Escape)
+                else if (keyInfo.Key == ConsoleKey.T)
+                    updateTimer();
+
+                else if (keyInfo.Key == ConsoleKey.Escape)
                 {
                     // At the very end we need to dispose of our stuffs.
                     timer.Dispose();
                     client.Dispose();
                     isRunning = false;
                 }
-
+                Console.Clear();
             }
         }
 
         private static void updateClientID()
         {
             Console.Clear();
-            Console.WriteLine("Please enter your discord client ID!");
+            Console.WriteLine("Please enter your Discord Rich Presence ID!");
             Process.Start("https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-");
             Settings.Default.clientID = Console.ReadLine();
             clientID = Settings.Default.clientID;
             Settings.Default.Save();
             setupClient();
+        }
+
+        private static void updateTimer()
+        {
+            bool validInput = false;
+            double timeSeconds = timeToUpdate;
+            while (!validInput)
+            {
+                Console.Clear();
+                Console.WriteLine("Please enter the time (in seconds (Default: 30 seconds))  Borderlands Rich Presence will update Discord:");
+                string time = Console.ReadLine();
+                validInput = double.TryParse(time, out timeSeconds);
+            }
+            timeToUpdate = TimeSpan.FromSeconds(timeSeconds).TotalMilliseconds;
+            Settings.Default.timeUpdate = timeToUpdate;
+            Settings.Default.Save();
+            Console.Clear();
         }
 
         private static void setupClient()
@@ -161,7 +184,7 @@ namespace BorderlandsDiscordRP
         static void timerHandler(object sender, ElapsedEventArgs args)
         {
             // Change our timer interval just in case.
-            timer.Interval = 30000;
+            timer.Interval = timeToUpdate;
 
             Process[] bl2Array = Process.GetProcesses().Where(p => p.ProcessName.Contains("Borderlands2")).ToArray();
             Process[] tpsArray = Process.GetProcesses().Where(p => p.ProcessName.Contains("BorderlandsPreSequel")).ToArray();
@@ -175,14 +198,18 @@ namespace BorderlandsDiscordRP
 
             client.Invoke();
 
+
             if (!bl2 && !tps)
+            {
+                client.ClearPresence();
                 return;
+            }
 
             Dictionary<string, string> dict = obtainKeyBasedOnGame();
             RichPresence presence = new RichPresence()
             {
                 Details = getCurrentMission(),
-                State = string.Format("{0} - ({1} of 4)", getCurrentClass(), getPlayersInLobby()),
+                State = string.Format("LVL {0} {1} - ({2} of 4)", getCurrentLevel(), getCurrentClass(), getPlayersInLobby()),
                 Assets = new Assets()
                 {
                     LargeImageKey = dict.Keys.ElementAtOrDefault(0),
@@ -272,6 +299,24 @@ namespace BorderlandsDiscordRP
                 lastKnownChar = characterClass;
 
             return classToCharacterName(characterClass);
+        }
+
+        private static int getCurrentLevel()
+        {
+            IReadOnlyDictionary<BLObject, object> dict = GetAll("WillowPlayerController", "Pawn");
+            KeyValuePair<BLObject, object>[] arr = dict.Where(m => m.Key.Name.Contains("Loader")).ToArray();
+            BLObject pawn = ((BLObject)arr.FirstOrDefault().Value);
+            if (pawn == null)
+                return lastKnownLevel;
+
+            pawn.UsePropertyMode = BLObject.PropertyMode.GetAll;
+            string gameStage = pawn["GameStage"].ToString();
+            if (!int.TryParse(gameStage, out int level))
+                level = lastKnownLevel;
+            else
+                lastKnownLevel = level;
+
+            return level;
         }
         #endregion
 

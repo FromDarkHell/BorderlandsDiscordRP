@@ -5,5 +5,8 @@
     <Setting Name="clientID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="timeUpdate" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">30000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

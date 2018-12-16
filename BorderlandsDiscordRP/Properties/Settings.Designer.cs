@@ -34,5 +34,17 @@ namespace BorderlandsDiscordRP.Properties {
                 this["clientID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30000")]
+        public double timeUpdate {
+            get {
+                return ((double)(this["timeUpdate"]));
+            }
+            set {
+                this["timeUpdate"] = value;
+            }
+        }
     }
 }
