@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Timers;
-using DiscordRPC;
-using DiscordRPC.Logging;
-using BorderlandsDiscordRP.Properties;
-using static BLIO;
 using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using System.Runtime.InteropServices;
+using BorderlandsDiscordRP.Properties;
+using DiscordRPC;
+using DiscordRPC.Logging;
+using static BLIO;
 
 namespace BorderlandsDiscordRP
 {
@@ -57,6 +58,7 @@ namespace BorderlandsDiscordRP
 
         #endregion
 
+        #region Constructors
         static void Main(string[] args)
         {
             Console.Title = "Borderlands Discord Rich Presence";
@@ -93,12 +95,13 @@ namespace BorderlandsDiscordRP
                 Console.Clear();
             }
         }
+        #endregion
 
+        #region Updaters
         private static void updateClientID()
         {
             Console.Clear();
             Console.WriteLine("Please enter your Discord Rich Presence ID!");
-            Process.Start("https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-");
             Settings.Default.clientID = Console.ReadLine();
             clientID = Settings.Default.clientID;
             Settings.Default.Save();
@@ -121,7 +124,9 @@ namespace BorderlandsDiscordRP
             Settings.Default.Save();
             Console.Clear();
         }
+        #endregion
 
+        #region Setup 
         private static void setupClient()
         {
             connected = false;
@@ -180,7 +185,9 @@ namespace BorderlandsDiscordRP
             Console.CursorVisible = true;
             Console.Clear();
         }
+        #endregion
 
+        #region Handlers
         static void timerHandler(object sender, ElapsedEventArgs args)
         {
             // Change our timer interval just in case.
@@ -220,6 +227,7 @@ namespace BorderlandsDiscordRP
 
             client.SetPresence(presence);
         }
+        #endregion
 
         #region Data Fetchers
         private static Dictionary<string, string> obtainKeyBasedOnGame()
@@ -602,5 +610,9 @@ namespace BorderlandsDiscordRP
             return "Unknown";
         }
         #endregion
+
+
+
+
     }
 }
