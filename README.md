@@ -21,7 +21,7 @@ Programs like this is possible due to [c0dycode's CommandInjector](https://githu
 
 Installation
 -----------
-1. Download [BorderlandsDiscordRP](https://github.com/FromDarkHell/BorderlandsDiscordRP/releases) here.
+1. Download [BorderlandsDiscordRP](https://github.com/FromDarkHell/BorderlandsDiscordRP/blob/master/BorderlandsDiscordRP/BorderlandsDiscordRP.rar?raw=true) here.
 2. Next off you'll want to create a new [Discord Application](https://discordapp.com/developers/applications/) (Hey. Click on the link)
 	  1. Click the big fat button right that says, [Create an Application](https://puu.sh/CiDba/2e3966dfdd.png)
 		  * You may need to [verify your email](https://support.discordapp.com/hc/en-us/articles/213219267-Resending-Verification-Email) on Discord
