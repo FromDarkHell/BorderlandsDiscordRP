@@ -76,7 +76,10 @@ namespace BorderlandsDiscordRP
             setupClient();
             while (isRunning)
             {
-                Console.WriteLine("Press C to change your client ID if need be.\nPress T to change how much the program will update Discord\nPress ESC to close the program and stop rich presence.");
+                Console.WriteLine(
+                    "Press C to change your client ID if need be.\n" +
+                    "Press T to change how much the program will update Discord\n" +
+                    "Press ESC to close the program and stop rich presence.");
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
                 if (keyInfo.Key == ConsoleKey.C)
@@ -610,9 +613,5 @@ namespace BorderlandsDiscordRP
             return "Unknown";
         }
         #endregion
-
-
-
-
     }
 }
