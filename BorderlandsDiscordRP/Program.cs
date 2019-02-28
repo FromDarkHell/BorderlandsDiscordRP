@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using System.Runtime.InteropServices;
 using BorderlandsDiscordRP.Properties;
 using DiscordRPC;
 using DiscordRPC.Logging;
@@ -314,20 +313,18 @@ namespace BorderlandsDiscordRP
 
         private static int getCurrentLevel()
         {
-            IReadOnlyDictionary<BLObject, object> dict = GetAll("WillowPlayerController", "Pawn");
-            KeyValuePair<BLObject, object>[] arr = dict.Where(m => m.Key.Name.Contains("Loader")).ToArray();
-            BLObject pawn = ((BLObject)arr.FirstOrDefault().Value);
-            if (pawn == null)
-                return lastKnownLevel;
 
-            pawn.UsePropertyMode = BLObject.PropertyMode.GetAll;
-            string gameStage = pawn["GameStage"].ToString();
-            if (!int.TryParse(gameStage, out int level))
-                level = lastKnownLevel;
+            IReadOnlyDictionary<BLObject, object> dict = GetAll("WillowHUDGFxMovie", "CachedLevel");
+            KeyValuePair<BLObject, object>[] arr = dict.Where(m => m.Key.Name.Contains("Transient")).ToArray();
+            string lev = dict.FirstOrDefault().Value?.ToString();
+
+            if (lev == null || lev.Trim() == "")
+                lev = lastKnownMission;
             else
-                lastKnownLevel = level;
-
+                lastKnownMission = lev;
+            int.TryParse(lev, out int level);
             return level;
+
         }
         #endregion
 
