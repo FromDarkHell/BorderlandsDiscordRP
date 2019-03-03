@@ -36,6 +36,7 @@
   <PropertyGroup>
     <ApplicationIcon>Launcher.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="DiscordRPC">
       <HintPath>..\..\General DLLs\Discord RPC\DiscordRPC.dll</HintPath>
